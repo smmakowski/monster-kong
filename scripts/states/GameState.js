@@ -3,6 +3,7 @@ let GameState = {
   init: function() {
     // note cursors can be set differnlyy depengin on state state did not work in Boot
     this.cursors = this.game.input.keyboard.createCursorKeys(); // enables arrow keys
+    this.game.world.setBounds(0, 0, 360, 700); // (leftMostCornerX, leftMostCornerXY, width, height)
     this.RUNNING_SPEED = 180; // set running and jump global speeds
     this.JUMPING_SPEED = 550;
   },
@@ -10,7 +11,7 @@ let GameState = {
     const self = this;
   	// place background and add other sprites
     console.log('Now in GameState!');
-    this.ground = this.add.sprite(0, 500, 'ground');
+    this.ground = this.add.sprite(0, 638, 'ground');
     this.game.physics.arcade.enable(this.ground); //enable physics for entity
     this.ground.body.allowGravity = false; // prevents gravity from affecting background
     this.ground.body.immovable = true;
@@ -33,12 +34,14 @@ let GameState = {
     this.platforms.setAll('body.immovable', true); // set property for all sprties in group
     this.platforms.setAll('body.allowGravity', false); // prevents all from falling
 
-    this.player = this.add.sprite(100, 200, 'player', 3);
+    this.player = this.add.sprite(10, 545, 'player', 3);
     this.player.anchor.setTo(.5);
     this.player.customParams = {mustJump: false, mustGoLeft: false, mustGoRight: false};
     this.player.animations.add('walk', [0, 1, 2, 1], 6, false);
     this.game.physics.arcade.enable(this.player);
     this.addOnScreenControls();
+
+    this.game.camera.follow(this.player); // follow player with camera
   },
   update: function() { // update methid
     //the below metods also acept calback
@@ -67,9 +70,9 @@ let GameState = {
   },
   addOnScreenControls: function() {
     const self = this;
-    this.leftButton = this.add.button(this.game.world.width * .15, this.game.world.height * .92, 'movementButton');
-    this.rightButton = this.add.button(this.game.world.width * .4, this.game.world.height * .92, 'movementButton');
-    this.jumpButton = this.add.button(this.game.world.width * .85, this.game.world.height * .92, 'actionButton');
+    this.leftButton = this.add.button(48, 565, 'movementButton');
+    this.rightButton = this.add.button(144, 565, 'movementButton');
+    this.jumpButton = this.add.button(312, 565, 'actionButton');
     let buttons = [this.leftButton, this.rightButton, this.jumpButton];
 
     // set opacity for buttons and enable input;
@@ -77,6 +80,7 @@ let GameState = {
       button.anchor.setTo(.5);
       button.alpha = .4;
       button.inputEnabled = true;
+      button.fixedToCamera = true; // allows buttons to remain in same X/Y when camera moves
     });
     // handle jump button
     this.jumpButton.events.onInputDown.add(function(button, event) {
