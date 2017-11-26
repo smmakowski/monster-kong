@@ -16,10 +16,22 @@ let GameState = {
     this.ground.body.immovable = true;
     console.log(self.ground.body); // check out attributes of body in console
 
-    this.platform = this.add.sprite(0, 300, 'platform');
-    this.game.physics.arcade.enable(this.platform);
-    this.platform.body.allowGravity = false;
-    this.platform.body.immovable = true; // prevents movement due to colision
+    const platformData = [
+      {x: 0, y: 430},
+      {x: 45, y: 560},
+      {x: 90, y: 290},
+      {x: 0, y: 140}
+    ];
+
+    this.platforms = this.add.group(); // create group for platforms
+    this.platforms.enableBody = true; // enable body attribute for physcis
+
+    platformData.forEach(function(coord) {
+      this.platforms.create(coord.x, coord.y, 'platform'); // create platforms based on data
+    }, this);
+
+    this.platforms.setAll('body.immovable', true); // set property for all sprties in group
+    this.platforms.setAll('body.allowGravity', false); // prevents all from falling
 
     this.player = this.add.sprite(100, 200, 'player', 3);
     this.player.anchor.setTo(.5);
@@ -32,16 +44,18 @@ let GameState = {
     //the below metods also acept calback
   	// update will run overthing under this method periodically during runtime
     this.game.physics.arcade.collide(this.player, this.ground); // checks if theyr arein promimity (when you want things to interfers)
-    this.game.physics.arcade.collide(this.player, this.platform); // alternatively you can use .overlap to check if overlapping (when things are in the sam space but dont interfere)
+    this.game.physics.arcade.collide(this.player, this.platforms); // alternatively you can use .overlap to check if overlapping (when things are in the sam space but dont interfere)
 
     // the players speed is always 0 (not moving if )
     this.player.body.velocity.x = 0; //reset the movement to 0
     // handling for left and right
-    if (this.cursors.left.isDown || this.player.customParams.mustGoLeft) {
+    if ((this.cursors.left.isDown  && !this.cursors.right.isDown)||
+    (this.player.customParams.mustGoLeft && !this.player.customParams.mustGoRight)) { //prevent holdig both at same time
       // this.player.scale.setTo(1);
       // this.player.body.velocity.x = -this.RUNNING_SPEED;
       this.moveLeft();
-    } else if (this.cursors.right.isDown || this.player.customParams.mustGoRight) {
+    } else if ((this.cursors.right.isDown  && !this.cursors.left.isDown) ||
+    (this.player.customParams.mustGoRight && !this.player.customParams.mustGoLeft)) {
       // this.player.scale.setTo(-1, 1);
       // this.player.body.velocity.x = this.RUNNING_SPEED;
       this.moveRight();
