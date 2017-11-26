@@ -23,6 +23,7 @@ let GameState = {
 
     this.player = this.add.sprite(100, 200, 'player', 3);
     this.player.anchor.setTo(.5);
+    this.player.customParams = {mustJump: false, mustGoLeft: false, mustGoRight: false};
     this.player.animations.add('walk', [0, 1, 2, 1], 6, false);
     this.game.physics.arcade.enable(this.player);
     this.addOnScreenControls();
@@ -36,25 +37,25 @@ let GameState = {
     // the players speed is always 0 (not moving if )
     this.player.body.velocity.x = 0; //reset the movement to 0
     // handling for left and right
-    if (this.cursors.left.isDown) {
+    if (this.cursors.left.isDown || this.player.customParams.mustGoLeft) {
       // this.player.scale.setTo(1);
       // this.player.body.velocity.x = -this.RUNNING_SPEED;
       this.moveLeft();
-    } else if (this.cursors.right.isDown) {
+    } else if (this.cursors.right.isDown || this.player.customParams.mustGoRight) {
       // this.player.scale.setTo(-1, 1);
       // this.player.body.velocity.x = this.RUNNING_SPEED;
       this.moveRight();
     }
     // handling for jumping
-    if (this.cursors.up.isDown && this.player.body.touching.down) { //.touching checks to see if sprite is currently touching osmeting on edge ex .down
+    if ((this.cursors.up.isDown || this.player.customParams.mustJump) && this.player.body.touching.down) { //.touching checks to see if sprite is currently touching osmeting on edge ex .down
       this.jump();
     }
   },
   addOnScreenControls: function() {
     const self = this;
-    this.leftButton = this.add.sprite(this.game.world.width * .15, this.game.world.height * .92, 'movementButton');
-    this.rightButton = this.add.sprite(this.game.world.width * .4, this.game.world.height * .92, 'movementButton');
-    this.jumpButton = this.add.sprite(this.game.world.width * .85, this.game.world.height * .92, 'actionButton');
+    this.leftButton = this.add.button(this.game.world.width * .15, this.game.world.height * .92, 'movementButton');
+    this.rightButton = this.add.button(this.game.world.width * .4, this.game.world.height * .92, 'movementButton');
+    this.jumpButton = this.add.button(this.game.world.width * .85, this.game.world.height * .92, 'actionButton');
     let buttons = [this.leftButton, this.rightButton, this.jumpButton];
 
     // set opacity for buttons and enable input;
@@ -62,13 +63,39 @@ let GameState = {
       button.anchor.setTo(.5);
       button.alpha = .4;
       button.inputEnabled = true;
-      button.events.onInputDown.add(function() {
-        console.log('Sup?');
-      }, this);
-      button.events.onInputUp.add(function(sprite, event) {
-        sprite.scale.setTo(1);
-      }, this);
     });
+    // handle jump button
+    this.jumpButton.events.onInputDown.add(function(button, event) {
+      button.scale.setTo(.8);
+      self.player.customParams.mustJump = true;
+    });
+
+    this.jumpButton.events.onInputUp.add(function(button, event) {
+      button.scale.setTo(1);
+      this.player.customParams.mustJump = false;
+    }, this);
+    // handle left and right buttons
+
+    this.leftButton.events.onInputDown.add(function(button, event) {
+      button.scale.setTo(.8);
+      self.player.customParams.mustGoLeft = true;
+    });
+
+    this.leftButton.events.onInputUp.add(function(button, event) {
+      button.scale.setTo(1);
+      this.player.customParams.mustGoLeft = false;
+    }, this);
+
+    this.rightButton.events.onInputDown.add(function(button, event) {
+      button.scale.setTo(.8);
+      self.player.customParams.mustGoRight = true;
+    });
+
+    this.rightButton.events.onInputUp.add(function(button, event) {
+      button.scale.setTo(1);
+      this.player.customParams.mustGoRight = false;
+    }, this);
+
   },
   moveLeft: function() {
     this.player.scale.setTo(1);
