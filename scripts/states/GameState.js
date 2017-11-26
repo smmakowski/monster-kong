@@ -25,8 +25,7 @@ let GameState = {
     this.player.anchor.setTo(.5);
     this.player.animations.add('walk', [0, 1, 2, 1], 6, true);
     this.game.physics.arcade.enable(this.player);
-
-    this.player.animations.play('walk'); // play animation
+    this.addOnScreenControls();
   },
   update: function() { // update methid
     //the below metods also acept calback
@@ -38,17 +37,50 @@ let GameState = {
     this.player.body.velocity.x = 0; //reset the movement to 0
     // handling for left and right
     if (this.cursors.left.isDown) {
-      this.player.scale.setTo(1);
-      this.player.body.velocity.x = -this.RUNNING_SPEED;
+      // this.player.scale.setTo(1);
+      // this.player.body.velocity.x = -this.RUNNING_SPEED;
+      this.moveLeft();
     } else if (this.cursors.right.isDown) {
-      this.player.scale.setTo(-1, 1);
-      this.player.body.velocity.x = this.RUNNING_SPEED;
+      // this.player.scale.setTo(-1, 1);
+      // this.player.body.velocity.x = this.RUNNING_SPEED;
+      this.moveRight();
     }
     // handling for jumping
     if (this.cursors.up.isDown && this.player.body.touching.down) { //.touching checks to see if sprite is currently touching osmeting on edge ex .down
-      this.player.body.velocity.y = -this.JUMPING_SPEED;
+      this.jump();
     }
   },
+  addOnScreenControls: function() {
+    const self = this;
+    this.leftButton = this.add.sprite(this.game.world.width * .15, this.game.world.height * .92, 'movementButton');
+    this.rightButton = this.add.sprite(this.game.world.width * .4, this.game.world.height * .92, 'movementButton');
+    this.jumpButton = this.add.sprite(this.game.world.width * .85, this.game.world.height * .92, 'actionButton');
+    let buttons = [this.leftButton, this.rightButton, this.jumpButton];
 
-
+    // set opacity for buttons and enable input;
+    buttons.forEach(function(button) {
+      button.anchor.setTo(.5);
+      button.alpha = .4;
+      button.inputEnabled = true;
+      button.events.onInputDown.add(function() {
+        console.log('Sup?');
+      }, this);
+      button.events.onInputUp.add(function(sprite, event) {
+        sprite.scale.setTo(1);
+      }, this);
+    });
+  },
+  moveLeft: function() {
+    this.player.scale.setTo(1);
+    this.player.body.velocity.x = -this.RUNNING_SPEED;
+    this.player.animations.play('walk'); // play animation
+  },
+  moveRight: function() {
+    this.player.scale.setTo(-1, 1);
+    this.player.body.velocity.x = this.RUNNING_SPEED;
+    this.player.animations.play('walk'); // play animation
+  },
+  jump: function() {
+    this.player.body.velocity.y = -this.JUMPING_SPEED;
+  }
 };
