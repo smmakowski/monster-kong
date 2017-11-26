@@ -12,6 +12,9 @@ let PreloadState ={
     this.load.image('ground', '../../assets/images/ground.png');
     this.load.spritesheet('fire', '../../assets/images/fire_spritesheet.png', 20, 21, 2, 1, 1);
     this.load.spritesheet('player', '../../assets/images/player_spritesheet.png', 28, 30, 5, 1, 1);
+
+    // load level text files
+    this.load.text('level1', '../../assets/level_data/level_1.json');
   },
   create: function() {
     console.log('Now in PreloadState');

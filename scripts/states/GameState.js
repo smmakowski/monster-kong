@@ -24,17 +24,19 @@ let GameState = {
       {x: 0, y: 140}
     ];
 
+    this.levelData = JSON.parse(this.game.cache.getText('level1'));
+
     this.platforms = this.add.group(); // create group for platforms
     this.platforms.enableBody = true; // enable body attribute for physcis
 
-    platformData.forEach(function(coord) {
+    this.levelData.platformData.forEach(function(coord) {
       this.platforms.create(coord.x, coord.y, 'platform'); // create platforms based on data
     }, this);
 
     this.platforms.setAll('body.immovable', true); // set property for all sprties in group
     this.platforms.setAll('body.allowGravity', false); // prevents all from falling
 
-    this.player = this.add.sprite(10, 545, 'player', 3);
+    this.player = this.add.sprite(this.levelData.playerStart.x, this.levelData.playerStart.y, 'player', 3);
     this.player.anchor.setTo(.5);
     this.player.customParams = {mustJump: false, mustGoLeft: false, mustGoRight: false};
     this.player.animations.add('walk', [0, 1, 2, 1], 6, false);
