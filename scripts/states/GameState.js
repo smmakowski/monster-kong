@@ -23,7 +23,7 @@ let GameState = {
 
     this.player = this.add.sprite(100, 200, 'player', 3);
     this.player.anchor.setTo(.5);
-    this.player.animations.add('walk', [0, 1, 2, 1], 6, true);
+    this.player.animations.add('walk', [0, 1, 2, 1], 6, false);
     this.game.physics.arcade.enable(this.player);
     this.addOnScreenControls();
   },
