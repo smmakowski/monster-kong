@@ -6,12 +6,12 @@ let PreloadState ={
     this.load.setPreloadSprite(this.loadingBar); // crops arg image depening on load percentage
     // preload assets here
     this.load.image('actionButton', '../../assets/images/actionButton.png');
-    this.load.image('movementButton', '../../assets/images/movementButton.png');
+    this.load.image('movementButton', '../../assets/images/arrowButton.png');
     this.load.image('barrel', '../../assets/images/barrel.png');
     this.load.image('platform', '../../assets/images/platform.png');
     this.load.image('ground', '../../assets/images/ground.png');
-    this.load.spriteSheet('fire', '../../assets/images/fire_spritsheet.png');
-    this.load.spriteSheet('player', '../../assets/images/player_spritesheet.png');
+    this.load.spritesheet('fire', '../../assets/images/fire_spritesheet.png', 20, 21, 2, 1, 1);
+    this.load.spritesheet('player', '../../assets/images/player_spritesheet.png', 28, 30, 5, 1, 1);
   },
   create: function() {
     console.log('Now in PreloadState');

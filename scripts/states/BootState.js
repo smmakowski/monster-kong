@@ -12,7 +12,6 @@ let BootState = {
   create: function() {
     //set stage background as white, start PreloadState
     console.log('Now in Bootstate');
-    this.game.stage.backgroundColor = '#fff';
     this.state.start('PreloadState');
   }
 }
