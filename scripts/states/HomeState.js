@@ -5,7 +5,9 @@ let HomeState = {
   },
   create: function() {
     // add sprites
+    const self = this;
     console.log('Now on HomeState!');
+    console.log(self.cursors);
     this.homeText = this.add.text(this.game.world.centerX, this.game.world.centerY, this.message, homeTextStyle);
     this.homeText.anchor.setTo(.5);
     this.homeText.inputEnabled = true;

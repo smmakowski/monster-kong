@@ -1,5 +1,5 @@
 const homeTextStyle = {
   font: '40px Impact',
-  fill: 'Black',
+  fill: 'White',
   align: 'center',
 }

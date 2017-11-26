@@ -7,6 +7,12 @@ let BootState = {
     // add physics engine in boot
     this.game.physics.startSystem(Phaser.Physics.ARCADE); // arcade phhyscis are not memory heave
     this.game.physics.arcade.gravity.y = 1000; // set gravity (via trial and error) y means vertical x is horixonal
+
+    // enable keyboard input
+    this.cursors = this.game.input.keyboard.createCursorKeys(); // enables arrow keys
+    this.RUNNING_SPEED = 180; // set running and jump global speeds
+    this.JUMPING_SPEED = 550;
+
   },
   preload: function() {
     //preload assets for PreloadState
