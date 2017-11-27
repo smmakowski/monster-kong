@@ -1,7 +1,8 @@
 let GameOverState = {
-  init: function(message) {
+  init: function(message, score) {
       // method to initialize state
       this.message = message;
+      this.finalScore = createScoreString(score);
   },
   create: function() {
     // add sprites
@@ -10,6 +11,9 @@ let GameOverState = {
     console.log(self.cursors);
     this.gameOverText = this.add.text(180, 100, 'GAME OVER', gameOverTextStyle);
     this.gameOverText.anchor.setTo(.5);
+
+    this.finalScoreText = this.add.text(180, 150, 'Final Score: ' + this.finalScore, livesTextStyle);
+    this.finalScoreText.anchor.setTo(.5);
 
     this.messageText = this.add.text(180, 350, this.message, gameOverMessageTextStyle);
     this.messageText.anchor.setTo(.5);
@@ -21,7 +25,6 @@ let GameOverState = {
 
     // call start method to enter game state (set as event handler)
   },
-
   restartGame: function() {
     this.state.start('HomeState');
   }
