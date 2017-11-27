@@ -79,6 +79,8 @@ let GameState = {
     // allow barrels to collide with platforms and ground
     this.game.physics.arcade.collide(this.barrels, this.ground);
     this.game.physics.arcade.collide(this.barrels, this.platforms);
+    // allow barrel ad player colliosn
+    this.game.physics.arcade.overlap(this.player, this.barrels, this.killPlayer);
     // the players speed is always 0 (not moving if )
     this.player.body.velocity.x = 0; //reset the movement to 0
     // handling for left and right
@@ -100,6 +102,13 @@ let GameState = {
     if ((this.cursors.up.isDown || this.player.customParams.mustJump) && this.player.body.touching.down) { //.touching checks to see if sprite is currently touching osmeting on edge ex .down
       this.jump();
     }
+
+    // set zone to kill barrels, and
+    this.barrels.forEach(function(barrel) {
+      if (barrel.x < 10 && barrel.y > 600) {
+        barrel.kill();
+      }
+    }, this);
   },
   addOnScreenControls: function() {
     const self = this;
