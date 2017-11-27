@@ -36,6 +36,17 @@ let GameState = {
     this.platforms.setAll('body.immovable', true); // set property for all sprties in group
     this.platforms.setAll('body.allowGravity', false); // prevents all from falling
 
+    this.fires = this.add.group();
+    this.fires.enableBody = true;
+
+    this.levelData.fireData.forEach(function(coord) {
+      let fire = this.fires.create(coord.x, coord.y, 'fire'); //add fire to group
+      fire.animations.add('fire', [0, 1], 4, true); // add animation for fire
+      fire.play('fire'); // pla animation for fire
+    }, this);
+
+    this.fires.setAll('body.allowGravity', false);
+
     this.player = this.add.sprite(this.levelData.playerStart.x, this.levelData.playerStart.y, 'player', 3);
     this.player.anchor.setTo(.5);
     this.player.customParams = {mustJump: false, mustGoLeft: false, mustGoRight: false};
@@ -50,7 +61,7 @@ let GameState = {
   	// update will run overthing under this method periodically during runtime
     this.game.physics.arcade.collide(this.player, this.ground); // checks if theyr arein promimity (when you want things to interfers)
     this.game.physics.arcade.collide(this.player, this.platforms); // alternatively you can use .overlap to check if overlapping (when things are in the sam space but dont interfere)
-
+    this.game.physics.arcade.overlap(this.player, this.fires, this.killPlayer);
     // the players speed is always 0 (not moving if )
     this.player.body.velocity.x = 0; //reset the movement to 0
     // handling for left and right
@@ -64,6 +75,9 @@ let GameState = {
       // this.player.scale.setTo(-1, 1);
       // this.player.body.velocity.x = this.RUNNING_SPEED;
       this.moveRight();
+    } else {
+      this.player.animations.stop();
+      this.player.frame = 3;
     }
     // handling for jumping
     if ((this.cursors.up.isDown || this.player.customParams.mustJump) && this.player.body.touching.down) { //.touching checks to see if sprite is currently touching osmeting on edge ex .down
@@ -129,5 +143,9 @@ let GameState = {
   },
   jump: function() {
     this.player.body.velocity.y = -this.JUMPING_SPEED;
+  },
+  killPlayer: function() {
+    console.log('DEAD!');
+    game.state.restart('GameState');
   }
 };

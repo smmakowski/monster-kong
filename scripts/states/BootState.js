@@ -22,6 +22,6 @@ let BootState = {
   create: function() {
     //set stage background as white, start PreloadState
     console.log('Now in Bootstate');
-    this.state.start('PreloadState');
+    game.state.start('PreloadState');
   }
 }

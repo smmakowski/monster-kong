@@ -18,6 +18,6 @@ let PreloadState ={
   },
   create: function() {
     console.log('Now in PreloadState');
-    this.state.start('HomeState'); // start gameState
+    game.state.start('HomeState'); // start gameState
   },
 }
