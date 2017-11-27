@@ -1,4 +1,5 @@
 {
+  "level": 1,
   "playerStart": {"x": 15, "y": 545},
   "platformData": [
     {"x": 0, "y": 430},

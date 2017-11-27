@@ -1,11 +1,15 @@
 // game state object
 let GameState = {
-  init: function() {
+  init: function(level, lives, score) {
     // note cursors can be set differnlyy depengin on state state did not work in Boot
     this.cursors = this.game.input.keyboard.createCursorKeys(); // enables arrow keys
     this.game.world.setBounds(0, 0, 360, 700); // (leftMostCornerX, leftMostCornerXY, width, height)
     this.RUNNING_SPEED = 180; // set running and jump global speeds
     this.JUMPING_SPEED = 550;
+    // passable parameters for level changes (with defaults for new gmae)
+    this.level = level || 1; // pass level
+    this.lives = lives || 5; // pass current lives
+    this.score = score || 0; // pass score from previous level or zero
   },
   create: function() { // create scene here
     const self = this;
@@ -23,8 +27,8 @@ let GameState = {
       {x: 90, y: 290},
       {x: 0, y: 140}
     ];
-
-    this.levelData = JSON.parse(this.game.cache.getText('level1'));
+    console.log('Current level is ', self.level);
+    this.levelData = JSON.parse(this.game.cache.getText('level' + this.level));
 
     this.platforms = this.add.group(); // create group for platforms
     this.platforms.enableBody = true; // enable body attribute for physcis
@@ -57,6 +61,9 @@ let GameState = {
     this.player.animations.add('walk', [0, 1, 2, 1], 6, false);
     this.game.physics.arcade.enable(this.player);
     this.player.body.collideWorldBounds = true;
+
+    this.levelText = this.add.text(275, 30, 'Level: ' + this.levelData.level, levelTextStyle);
+    this.levelText.fixedToCamera = true;
 
     this.addOnScreenControls(); // add onscreen controls
 
@@ -175,8 +182,9 @@ let GameState = {
     game.state.start('GameState');
   },
   winLevel: function() {
+    const self = this;
     console.log('GOAL REACHED!');
-    game.state.start('GameState');
+      game.state.start('GameState', true, false, 2, self.lives, self.score);
   },
   createBarrel: function() {
     // get first 'dead' sprite
@@ -191,5 +199,5 @@ let GameState = {
 
     barrel.reset(this.levelData.goalLocation.x, this.levelData.goalLocation.y);
     barrel.body.velocity.x = this.levelData.barrelSpeed;
-  }
+  },
 };

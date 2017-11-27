@@ -16,6 +16,7 @@ let PreloadState ={
 
     // load level text files
     this.load.text('level1', '../../assets/level_data/level_1.json');
+    this.load.text('level2', '../../assets/level_data/level_2.json');
   },
   create: function() {
     console.log('Now in PreloadState');

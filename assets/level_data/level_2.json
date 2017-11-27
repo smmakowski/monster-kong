@@ -1,0 +1,13 @@
+{
+  "level": 2,
+  "playerStart": {"x": 15, "y": 545},
+  "platformData": [
+    
+  ],
+  "fireData": [
+    {"x": 180, "y": 545}
+  ],
+  "goalLocation": {"x": 300, "y": 545},
+  "barrelFrequency": 5,
+  "barrelSpeed": -50
+}
