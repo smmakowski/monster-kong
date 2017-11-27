@@ -13,5 +13,7 @@
     {"x": 180, "y": 268},
     {"x": 200, "y": 118}
   ],
-  "goalLocation": {"x": 20, "y" : 90}
+  "goalLocation": {"x": 20, "y" : 90},
+  "barrelFrequency": 5,
+  "barrelSpeed": 50
 }

@@ -56,9 +56,18 @@ let GameState = {
     this.player.customParams = {mustJump: false, mustGoLeft: false, mustGoRight: false};
     this.player.animations.add('walk', [0, 1, 2, 1], 6, false);
     this.game.physics.arcade.enable(this.player);
-    this.addOnScreenControls();
+    this.player.body.collideWorldBounds = true;
+
+    this.addOnScreenControls(); // add onscreen controls
 
     this.game.camera.follow(this.player); // follow player with camera
+    // create barrels
+
+    this.barrels = this.add.group();
+    this.barrels.enableBody = true; // enables physcics ffor groups
+
+    this.createBarrel(); // create a barrel
+    this.barrelCreator = this.game.time.events.loop(Phaser.Timer.SECOND * this.levelData.barrelFrequency, this.createBarrel, this);
   },
   update: function() { // update methid
     //the below metods also acept calback
@@ -67,6 +76,9 @@ let GameState = {
     this.game.physics.arcade.collide(this.player, this.platforms); // alternatively you can use .overlap to check if overlapping (when things are in the sam space but dont interfere)
     this.game.physics.arcade.overlap(this.player, this.fires, this.killPlayer);
     this.game.physics.arcade.overlap(this.player, this.goal, this.winLevel);
+    // allow barrels to collide with platforms and ground
+    this.game.physics.arcade.collide(this.barrels, this.ground);
+    this.game.physics.arcade.collide(this.barrels, this.platforms);
     // the players speed is always 0 (not moving if )
     this.player.body.velocity.x = 0; //reset the movement to 0
     // handling for left and right
@@ -156,5 +168,19 @@ let GameState = {
   winLevel: function() {
     console.log('GOAL REACHED!');
     game.state.start('GameState');
+  },
+  createBarrel: function() {
+    // get first 'dead' sprite
+    //phaser keeps track of alive and dead sprite (if you kill a sprite its not necessaryly eleted )
+    let barrel = this.barrels.getFirstExists(false); // assigns to first dead sprite if pass false
+
+    if (!barrel) { // no dead spreites
+        barrel = this.barrels.create(0, 0, 'barrel'); // creae one
+    }
+    barrel.body.collideWorldBounds = true;
+    barrel.body.bounce.set(1, 0);
+
+    barrel.reset(this.levelData.goalLocation.x, this.levelData.goalLocation.y);
+    barrel.body.velocity.x = this.levelData.barrelSpeed;
   }
 };
