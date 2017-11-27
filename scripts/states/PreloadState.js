@@ -1,4 +1,4 @@
-let PreloadState ={
+let PreloadState = {
   preload: function() {
     // add sprites for logos and loading bar
     this.loadingBar = this.game.add.sprite(this.game.world.centerX, this.game.world.centerY, 'loadingBar');
@@ -15,7 +15,7 @@ let PreloadState ={
     this.load.spritesheet('player', '../../assets/images/player_spritesheet.png', 28, 30, 5, 1, 1);
 
     // load level text files
-    this.load.text('level1', '../../assets/level_data/level_1.json');
+    this.load.text('level1', '../../assets/level_data/level_2.json');
     this.load.text('level2', '../../assets/level_data/level_2.json');
   },
   create: function() {

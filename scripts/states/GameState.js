@@ -62,11 +62,17 @@ let GameState = {
     this.game.physics.arcade.enable(this.player);
     this.player.body.collideWorldBounds = true;
 
-    this.levelText = this.add.text(275, 30, 'Level: ' + this.levelData.level, levelTextStyle);
+    //add HUD text
+    this.levelText = this.add.text(275, 30, 'Level: ', levelTextStyle);
     this.levelText.fixedToCamera = true;
 
-    this.livesText = this.add.text(15, 30, 'Lives: ' + this.lives, levelTextStyle);
+    this.livesText = this.add.text(15, 60, 'Lives: ', levelTextStyle);
     this.livesText.fixedToCamera = true;
+
+    this.scoreText = this.add.text(15, 30, 'Score: ', levelTextStyle);
+    this.scoreText.fixedToCamera = true;
+
+    this.updateHud();
 
     this.addOnScreenControls(); // add onscreen controls
 
@@ -202,9 +208,11 @@ let GameState = {
     const self = this;
     console.log('GOAL REACHED!');
     if (this.level === 2) {  // if last level (hardcode number as levels are added )
-        this.state.start('GameOverState', true, false, 'You Win!');
+      this.score += 1000;
+      this.state.start('GameOverState', true, false, 'You Win!');
     } else {
-        this.state.start('GameState', true, false, self.level + 1, self.lives, self.score);
+      this.score += 1000;
+      this.state.start('GameState', true, false, self.level + 1, self.lives, self.score);
     }
 
   },
@@ -224,6 +232,24 @@ let GameState = {
   },
 
   updateHud: function() {
-    this.livesText.text = 'Lives:' + this.lives;
+    // update lives
+    let hearts = '';
+
+    for (let i = 0; i < this.lives; i++) {
+      hearts += '❤'; // add heart for each life
+    }
+    this.livesText.text = 'Lives: ' +  hearts;
+
+    // update score text
+    let score = '';
+    let scoreStringLength = this.score.toString(); // turn to string
+    let diff = 7 - score.length; // get missing zero count
+
+    for (let j = 0; j < diff; j++) {
+      score += '0'; //fill zeros;
+    }
+
+    score += this.score; // concat with actual score
+    this.scoreText.text = 'Score: ' + score;
   }
 };
