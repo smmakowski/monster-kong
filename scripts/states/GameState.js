@@ -186,7 +186,7 @@ let GameState = {
     console.log(this);
     if (this.lives === 1) { // if more than one life available
       console.log('DEAD!'); //kill character and go to end screen
-      game.state.start('GameState');
+      game.state.start('GameOverState', true, false, 'You have died!');
     } else {
       // console.log('DEAD!'); //kill character and go to end screen
       // game.state.start('GameState');
@@ -201,7 +201,12 @@ let GameState = {
   winLevel: function() {
     const self = this;
     console.log('GOAL REACHED!');
-    game.state.start('GameState', true, false, self.level, self.lives, self.score);
+    if (this.level === 2) {  // if last level (hardcode number as levels are added )
+        this.state.start('GameOverState', true, false, 'You Win!');
+    } else {
+        this.state.start('GameState', true, false, self.level + 1, self.lives, self.score);
+    }
+
   },
   createBarrel: function() {
     // get first 'dead' sprite

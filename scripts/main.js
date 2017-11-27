@@ -5,4 +5,6 @@ game.state.add('BootState', BootState); // preload loading assets, and set windo
 game.state.add('PreloadState', PreloadState); // preload game and home assets and be loading screen
 game.state.add('HomeState', HomeState); // home screen state/main menu
 game.state.add('GameState', GameState); // add GameState this is where the main game will occur
+
+game.state.add('GameOverState', GameOverState);
 game.state.start('BootState'); // start game state
