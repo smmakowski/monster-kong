@@ -10,6 +10,7 @@ let GameState = {
     this.level = level || 1; // pass level
     this.lives = lives || 5; // pass current lives
     this.score = score || 0; // pass score from previous level or zero
+    // console.log(this);
   },
   create: function() { // create scene here
     const self = this;
@@ -19,7 +20,7 @@ let GameState = {
     this.game.physics.arcade.enable(this.ground); //enable physics for entity
     this.ground.body.allowGravity = false; // prevents gravity from affecting background
     this.ground.body.immovable = true;
-    console.log(self.ground.body); // check out attributes of body in console
+    //console.log(self.ground.body); // check out attributes of body in console
 
     const platformData = [
       {x: 0, y: 430},
@@ -27,7 +28,6 @@ let GameState = {
       {x: 90, y: 290},
       {x: 0, y: 140}
     ];
-    console.log('Current level is ', self.level);
     this.levelData = JSON.parse(this.game.cache.getText('level' + this.level));
 
     this.platforms = this.add.group(); // create group for platforms
@@ -65,6 +65,9 @@ let GameState = {
     this.levelText = this.add.text(275, 30, 'Level: ' + this.levelData.level, levelTextStyle);
     this.levelText.fixedToCamera = true;
 
+    this.livesText = this.add.text(15, 30, 'Lives: ' + this.lives, levelTextStyle);
+    this.livesText.fixedToCamera = true;
+
     this.addOnScreenControls(); // add onscreen controls
 
     this.game.camera.follow(this.player); // follow player with camera
@@ -81,13 +84,13 @@ let GameState = {
   	// update will run overthing under this method periodically during runtime
     this.game.physics.arcade.collide(this.player, this.ground); // checks if theyr arein promimity (when you want things to interfers)
     this.game.physics.arcade.collide(this.player, this.platforms); // alternatively you can use .overlap to check if overlapping (when things are in the sam space but dont interfere)
-    this.game.physics.arcade.overlap(this.player, this.fires, this.killPlayer);
-    this.game.physics.arcade.overlap(this.player, this.goal, this.winLevel);
+    this.game.physics.arcade.overlap(this.player, this.fires, this.killPlayer, null, this);
+    this.game.physics.arcade.overlap(this.player, this.goal, this.winLevel, null, this);
     // allow barrels to collide with platforms and ground
     this.game.physics.arcade.collide(this.barrels, this.ground);
     this.game.physics.arcade.collide(this.barrels, this.platforms);
     // allow barrel ad player colliosn
-    this.game.physics.arcade.overlap(this.player, this.barrels, this.killPlayer);
+    this.game.physics.arcade.overlap(this.player, this.barrels, this.killPlayer, null, this);
     // the players speed is always 0 (not moving if )
     this.player.body.velocity.x = 0; //reset the movement to 0
     // handling for left and right
@@ -177,14 +180,28 @@ let GameState = {
   jump: function() {
     this.player.body.velocity.y = -this.JUMPING_SPEED;
   },
-  killPlayer: function() {
-    console.log('DEAD!');
-    game.state.start('GameState');
+  killPlayer: function(sprite) {
+    const self = this;
+    console.log('self');
+    console.log(this);
+    if (this.lives === 1) { // if more than one life available
+      console.log('DEAD!'); //kill character and go to end screen
+      game.state.start('GameState');
+    } else {
+      // console.log('DEAD!'); //kill character and go to end screen
+      // game.state.start('GameState');
+      console.log('still alive');
+      this.lives -= 1; // decrease lives
+      this.updateHud(); // update hud
+      sprite.reset(this.levelData.playerStart.x, this.levelData.playerStart.y);
+    }
+    // console.log('DEAD!');
+    // game.state.start('GameState');
   },
   winLevel: function() {
     const self = this;
     console.log('GOAL REACHED!');
-      game.state.start('GameState', true, false, 2, self.lives, self.score);
+    game.state.start('GameState', true, false, self.level, self.lives, self.score);
   },
   createBarrel: function() {
     // get first 'dead' sprite
@@ -200,4 +217,8 @@ let GameState = {
     barrel.reset(this.levelData.goalLocation.x, this.levelData.goalLocation.y);
     barrel.body.velocity.x = this.levelData.barrelSpeed;
   },
+
+  updateHud: function() {
+    this.livesText.text = 'Lives:' + this.lives;
+  }
 };

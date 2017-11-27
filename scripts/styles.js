@@ -7,5 +7,11 @@ const homeTextStyle = {
 const levelTextStyle = {
   font: '20px Arial',
   fill: 'Blue',
-  align: 'center',
+  align: 'left',
+}
+
+const livesTextStyle = {
+  font: '20px Arial',
+  fill: 'White',
+  align: 'left',
 }
