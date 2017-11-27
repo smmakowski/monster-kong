@@ -10,6 +10,7 @@ let PreloadState ={
     this.load.image('barrel', '../../assets/images/barrel.png');
     this.load.image('platform', '../../assets/images/platform.png');
     this.load.image('ground', '../../assets/images/ground.png');
+    this.load.image('gorilla', '../../assets/images/gorilla3.png');
     this.load.spritesheet('fire', '../../assets/images/fire_spritesheet.png', 20, 21, 2, 1, 1);
     this.load.spritesheet('player', '../../assets/images/player_spritesheet.png', 28, 30, 5, 1, 1);
 

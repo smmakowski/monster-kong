@@ -47,6 +47,10 @@ let GameState = {
 
     this.fires.setAll('body.allowGravity', false);
 
+    this.goal = this.add.sprite(this.levelData.goalLocation.x, this.levelData.goalLocation.y, 'gorilla');
+    this.game.physics.arcade.enable(this.goal); //enable physics for entity
+    this.goal.body.allowGravity = false;
+
     this.player = this.add.sprite(this.levelData.playerStart.x, this.levelData.playerStart.y, 'player', 3);
     this.player.anchor.setTo(.5);
     this.player.customParams = {mustJump: false, mustGoLeft: false, mustGoRight: false};
@@ -62,6 +66,7 @@ let GameState = {
     this.game.physics.arcade.collide(this.player, this.ground); // checks if theyr arein promimity (when you want things to interfers)
     this.game.physics.arcade.collide(this.player, this.platforms); // alternatively you can use .overlap to check if overlapping (when things are in the sam space but dont interfere)
     this.game.physics.arcade.overlap(this.player, this.fires, this.killPlayer);
+    this.game.physics.arcade.overlap(this.player, this.goal, this.winLevel);
     // the players speed is always 0 (not moving if )
     this.player.body.velocity.x = 0; //reset the movement to 0
     // handling for left and right
@@ -146,6 +151,10 @@ let GameState = {
   },
   killPlayer: function() {
     console.log('DEAD!');
-    game.state.restart('GameState');
+    game.state.start('GameState');
+  },
+  winLevel: function() {
+    console.log('GOAL REACHED!');
+    game.state.start('GameState');
   }
 };
